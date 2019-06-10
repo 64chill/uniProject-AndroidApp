@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">unip_SimpleRSSFeeder_app</string>
+    <string name="title_home">Vesti</string>
+    <string name="title_show_unique_news">Pregled Pojedinačnih</string>
+    <string name="title_edit_news">Izmeni Vesti</string>
+    <string name="inputHandle_edit_news_add">Please add the RSS URL </string>
+    <string name="title_activity_view_rss_urls">ViewRssUrls</string>
+    <string name="activity2_title">Kliknite na URL ukoliko zelite da ga uklonite</string>
+    <string name="back_content_desc">Back</string>
+    <string name="dialog_remove_url_txt1">Da li ste sigurni da želite da uklonite ovaj URL?</string>
+    <string name="dialog_remove_url_cancelBtn">Cancel</string>
+    <string name="dialog_remove_url_removeBtn">Remove</string>
+</resources>
