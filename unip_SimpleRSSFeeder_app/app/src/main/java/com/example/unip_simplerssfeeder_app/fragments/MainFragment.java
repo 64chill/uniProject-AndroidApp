@@ -11,15 +11,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.unip_simplerssfeeder_app.R;
 import com.example.unip_simplerssfeeder_app.customAdapter.NewsListAdapter;
 import com.example.unip_simplerssfeeder_app.utils.DatabaseHelperRSSUrl;
+import com.example.unip_simplerssfeeder_app.utils.JsonHandler;
 import com.example.unip_simplerssfeeder_app.utils.NewsCard;
-import com.example.unip_simplerssfeeder_app.utils.ObjectSerializer;
 import com.example.unip_simplerssfeeder_app.utils.xml_parser_classes.RSSFeedParser;
 import com.example.unip_simplerssfeeder_app.utils.xml_parser_classes.RssFeedModel;
+
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -34,6 +36,9 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     public MainFragment() {
         // Required empty public constructor
+        newsCardsArray = new ArrayList<>();
+       // newsCardsArray.addAll(this.getArrayList_FromSharedPreferences());
+
     }
 
     @Override
@@ -43,16 +48,27 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         mDatabaseHelper = new DatabaseHelperRSSUrl(getActivity()); //set database helper
 
         view.findViewById(R.id.button_refresh_news).setOnClickListener(this);
-        newsCardsArray = this.getArrayList_FromSharedPreferences();
         allNews_listVew = (ListView) view.findViewById(R.id.list_view_all_news);
+
+        /*setting saved news----------------------------------------------------------------------*/
+        newsCardsArray = getArrayList_FromSharedPreferences(getActivity());
+        customAdapter = new NewsListAdapter(getActivity(), newsCardsArray);
+        allNews_listVew.setAdapter(customAdapter);
+        //newsCardsArray = new ArrayList<>();
 
         return view;
     }
 
     @Override
     public void onClick(View v) {
+        //////////////////////////////////////////
         if (v.getId() == R.id.button_refresh_news){
+            this.newsCardsArray.clear();
             refreshBttonClick();
+        }
+        //////////////////////////////////////////
+        if (v.getId() == R.id.list_view_all_news){
+
         }
         }
 
@@ -110,12 +126,10 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         } //doInBackGround end;
         @Override
         protected void onPostExecute(Void Void) {
-            /*for (NewsCard model : newsCardsArray) {
-                Log.e("at the end" , model.getTitle());
-            }*/
             Collections.shuffle(newsCardsArray); // randomize news
             customAdapter = new NewsListAdapter(getActivity(), newsCardsArray);
             allNews_listVew.setAdapter(customAdapter);
+            setSharedPreferences(newsCardsArray, getActivity());
            return;
         } //onPostExecute end;
     } // class end;
@@ -128,36 +142,43 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     *
      */
     //___________________________ setSharedPreferences _____________________________________________
-    public void setSharedPreferences(ArrayList<NewsCard> arrayL){
-        Context context = getActivity();
+    public void setSharedPreferences(ArrayList<NewsCard> arrayL  , Context context){
+
         //Set the values
+
         SharedPreferences prefs = context.getSharedPreferences("SimpleRSSFeeder_NewsList", Context.MODE_PRIVATE );
         SharedPreferences.Editor editor = prefs.edit();
         try {
-            Log.e("add arr list" , this.newsCardsArray.toString());
-            editor.putString("nwl", ObjectSerializer.serialize(this.newsCardsArray));
-        } catch (Exception e) {
-            Log.e("SP_error_write" ,e.getMessage());
+            prefs.edit().remove("nwl").commit(); // remove specific key from our shared preferences
+            editor.putString("nwl" , new JsonHandler().get_NewsCardArrayList_ToJsonStringFormat(arrayL));
+            Log.e("add", this.newsCardsArray.toString());
+        } catch (Exception e){
+            Log.e("SP_error_write1111111" ,e.getMessage());
         }
         editor.commit();
 
 
     }
 
-    //___________________________ sgetArrayList_FromSharedPreferences ______________________________
-    public ArrayList<NewsCard> getArrayList_FromSharedPreferences(){
-        Context context = getActivity();
+    //___________________________ getArrayList_FromSharedPreferences ______________________________
+    public ArrayList<NewsCard> getArrayList_FromSharedPreferences(Context context){
+        Log.e("read" , "start");
         //Retrieve the values
         // load tasks from preference
-        SharedPreferences prefs = context.getSharedPreferences("SimpleRSSFeeder_NewsList", Context.MODE_PRIVATE);
+        ArrayList<NewsCard> arrL = new ArrayList<>();
+
 
         try {
-            ArrayList<NewsCard> arrL = (ArrayList<NewsCard>) ObjectSerializer.deserialize(prefs.getString("SimpleRSSFeeder_NewsList", ObjectSerializer.serialize(new ArrayList<NewsCard>())));
+            SharedPreferences prefs = context.getSharedPreferences("SimpleRSSFeeder_NewsList", Context.MODE_PRIVATE);
+            String jsonString = prefs.getString("nwl" , "[{}]");
+            arrL = new JsonHandler().get_JsonStringFormat_ToNewsCardArrayList(jsonString);
+
             Log.e("arr list" , arrL.toString());
+
         } catch (Exception e) {
             Log.e("SP_error_read" , e.getMessage());
         }
-        return new ArrayList<NewsCard>();
+        return arrL;
 
     }
 
