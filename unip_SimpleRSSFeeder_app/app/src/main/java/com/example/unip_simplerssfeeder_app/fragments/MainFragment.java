@@ -2,8 +2,10 @@ package com.example.unip_simplerssfeeder_app.fragments;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.unip_simplerssfeeder_app.R;
 import com.example.unip_simplerssfeeder_app.customAdapter.NewsListAdapter;
@@ -22,11 +25,11 @@ import com.example.unip_simplerssfeeder_app.utils.NewsCard;
 import com.example.unip_simplerssfeeder_app.utils.xml_parser_classes.RSSFeedParser;
 import com.example.unip_simplerssfeeder_app.utils.xml_parser_classes.RssFeedModel;
 
-
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 
+//TODO SHOW TOAST
 public class MainFragment extends Fragment implements View.OnClickListener {
     private View view;
     private DatabaseHelperRSSUrl mDatabaseHelper;
@@ -37,8 +40,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     public MainFragment() {
         // Required empty public constructor
         newsCardsArray = new ArrayList<>();
-       // newsCardsArray.addAll(this.getArrayList_FromSharedPreferences());
-
     }
 
     @Override
@@ -49,13 +50,24 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
         view.findViewById(R.id.button_refresh_news).setOnClickListener(this);
         allNews_listVew = (ListView) view.findViewById(R.id.list_view_all_news);
-
         /*setting saved news----------------------------------------------------------------------*/
         newsCardsArray = getArrayList_FromSharedPreferences(getActivity());
-        customAdapter = new NewsListAdapter(getActivity(), newsCardsArray);
-        allNews_listVew.setAdapter(customAdapter);
-        //newsCardsArray = new ArrayList<>();
+        if (newsCardsArray !=null || !newsCardsArray.isEmpty()) {
+            customAdapter = new NewsListAdapter(getActivity(), newsCardsArray);
+            allNews_listVew.setAdapter(customAdapter);
 
+            /*____________________________________ list view onClick() ___________________________*/
+            allNews_listVew.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position,
+                                        long id) {
+                    NewsCard nc = (NewsCard) parent.getItemAtPosition(position);
+                    Log.e("adapterviewclick" ,nc.getPostLink() );
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(nc.getPostLink()));
+                    startActivity(browserIntent);
+                }
+            });
+        }
         return view;
     }
 
@@ -66,11 +78,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             this.newsCardsArray.clear();
             refreshBttonClick();
         }
-        //////////////////////////////////////////
-        if (v.getId() == R.id.list_view_all_news){
-
-        }
-        }
+    }
 
     private void refreshBttonClick(){
         // get URLS from out database and put them in an array
@@ -81,7 +89,11 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             urlList.add(mCoursor.getString(0));
         }
         /// start to parse, get news and relevant data from the internet
-        new grabAndShowNews(urlList).execute();
+        if (urlList !=null || !urlList.isEmpty()) {
+            new grabAndShowNews(urlList).execute();
+        } else {
+            Toast.makeText(view.getContext(), "You can't do that!, please insert at least one URL", Toast.LENGTH_LONG).show();
+        }
 
     }
     /*
@@ -101,9 +113,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            Log.e("dointheback" , "st");
             for (String uniqueUrl: urlList) {
-                Log.e("SimpleRSSFeeder" ,uniqueUrl );
+                Log.e("SimpleRSSFeeder" ,""+uniqueUrl );
                 try {
                     /*start ---------------------------------------------------------------------------*/
                     URL url = new URL(uniqueUrl);
@@ -172,8 +183,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             SharedPreferences prefs = context.getSharedPreferences("SimpleRSSFeeder_NewsList", Context.MODE_PRIVATE);
             String jsonString = prefs.getString("nwl" , "[{}]");
             arrL = new JsonHandler().get_JsonStringFormat_ToNewsCardArrayList(jsonString);
-
-            Log.e("arr list" , arrL.toString());
 
         } catch (Exception e) {
             Log.e("SP_error_read" , e.getMessage());

@@ -10,4 +10,7 @@
     <string name="dialog_remove_url_txt1">Da li ste sigurni da želite da uklonite ovaj URL?</string>
     <string name="dialog_remove_url_cancelBtn">Cancel</string>
     <string name="dialog_remove_url_removeBtn">Remove</string>
+    <string name="fragment_unique_views_textHolder1">Izaberite RSS feed</string>
+    <string name="fragment_unique_views_textHolder2">Izaberite broj naslova</string>
+    <string name="fragment_unique_views_button">Prikaži</string>
 </resources>

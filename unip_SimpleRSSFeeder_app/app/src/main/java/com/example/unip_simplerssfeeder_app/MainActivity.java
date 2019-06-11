@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.example.unip_simplerssfeeder_app.fragments.EditNewsFragment;
 import com.example.unip_simplerssfeeder_app.fragments.MainFragment;
+import com.example.unip_simplerssfeeder_app.fragments.UniqueNewsFragment;
 
 public class MainActivity extends AppCompatActivity {
     private TextView mTextMessage;
@@ -27,15 +28,14 @@ public class MainActivity extends AppCompatActivity {
                     FragmentManager m1 = getSupportFragmentManager();
                     m1.beginTransaction().replace(R.id.mainContentLayout, mp, mp.getTag()).commit();
                     return true;
+
                 // -----------------------------------------------------------------------------------------------
                 case R.id.navigation_show_unique_news:
-                    Context context = getApplicationContext();
-                    CharSequence text = "Hello toast!";
-                    int duration = Toast.LENGTH_SHORT;
+                    UniqueNewsFragment unf = new UniqueNewsFragment();
+                    FragmentManager fmUnique = getSupportFragmentManager();
+                    fmUnique.beginTransaction().replace(R.id.mainContentLayout, unf, unf.getTag()).commit();
+                    return true;
 
-                    Toast toast = Toast.makeText(context, text, duration);
-                    toast.show();
-                    return false;
                 // -----------------------------------------------------------------------------------------------
                 case R.id.navigation_edit_news:
                     EditNewsFragment enf = new EditNewsFragment();

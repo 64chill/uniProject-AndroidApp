@@ -64,7 +64,7 @@ public class NewsListAdapter extends ArrayAdapter<NewsCard> {
                 InputStream in = new java.net.URL(urldisplay).openStream();
                 mIcon11 = BitmapFactory.decodeStream(in);
             } catch (Exception e) {
-                Log.e("Error", e.getMessage());
+                Log.e("Error", ""+e.getMessage());
             }
             return mIcon11;
         }

@@ -2,35 +2,33 @@ package com.example.unip_simplerssfeeder_app.fragments;
 
 import android.content.Intent;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.unip_simplerssfeeder_app.R;
 
-
-import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 import com.example.unip_simplerssfeeder_app.ViewRssUrlsActivity;
 import com.example.unip_simplerssfeeder_app.utils.DatabaseHelperRSSUrl;
-import com.sun.syndication.feed.synd.SyndFeed;
-import com.sun.syndication.io.SyndFeedInput;
-import com.sun.syndication.io.XmlReader;
+import com.example.unip_simplerssfeeder_app.utils.xml_parser_classes.RSSFeedParser;
+import com.example.unip_simplerssfeeder_app.utils.xml_parser_classes.RssFeedModel;
 
 
-
+//TODO SHOW TOAST
 public class EditNewsFragment extends Fragment implements View.OnClickListener {
     private View view;
-    private Button addButton;
-    private Button viewUrlsButton;
     private DatabaseHelperRSSUrl mDatabaseHelper;//new DatabaseHelperRSSUrl(view.getContext());
+    private boolean asyncTaskAddCheck = false;
 
     public EditNewsFragment() {
         // Required empty public constructor
@@ -90,6 +88,10 @@ public class EditNewsFragment extends Fragment implements View.OnClickListener {
             Toast.makeText(view.getContext(), "You already added this URL! Please enter the new one!", Toast.LENGTH_LONG).show();
             return false;
         }
+        if(!doesURLContainRSSfeed(input_url)){
+            Toast.makeText(view.getContext(), "This is not a valid RSS FEED!", Toast.LENGTH_LONG).show();
+            return false;
+        }
         boolean insertData = mDatabaseHelper.addURLToDB(input_url);
 
         if(insertData){
@@ -102,9 +104,34 @@ public class EditNewsFragment extends Fragment implements View.OnClickListener {
 
     }
     // ---------------------------------------------------------------------------------------------------- doesURLContainRSSfeed
-    public boolean doesURLContainRSSfeed(String address) {
+    public boolean doesURLContainRSSfeed(String stringUrl) {
+        //stringUrl = "http://google.com";
+        Log.e("stringUrl" ,stringUrl );
+
+        new testIfValidRss(stringUrl);
+        try {
+            new testIfValidRss(stringUrl).execute().get();/*
+            try{
+                URL rss_url = new URL(stringUrl);
+                InputStream inputStream = rss_url.openConnection().getInputStream();
+                XmlPullParser xmlPullParser = Xml.newPullParser();
+                xmlPullParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
+                xmlPullParser.setInput(inputStream, null);
+            }catch(Exception e ){
+                e.printStackTrace();
+                Log.e("EXCEPTIONNNN" ,""+e.getMessage() );
+                return false;
+
+            }
+            Log.e("EXCEPTIONNNN" ,"trueeeeeeeeeeeeeeee" );
+            return false;*/
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return this.asyncTaskAddCheck;
+
         //address = "http://www.espn.com/espn/rss/news";
-        Toast.makeText(view.getContext(), "ADDRESS : " + address, Toast.LENGTH_SHORT).show();
+        /*Toast.makeText(view.getContext(), "ADDRESS : " + address, Toast.LENGTH_SHORT).show();
         boolean ok = false;
         try{
             URL url = new URL(address);
@@ -116,7 +143,38 @@ public class EditNewsFragment extends Fragment implements View.OnClickListener {
             ok = false;
         }
         Toast.makeText(view.getContext(), "OK : " + ok, Toast.LENGTH_SHORT).show();
-        return ok;
+        return ok;*/
     }
+
+    class testIfValidRss extends AsyncTask<Void, Void, Void> {
+        private String stringUrl;
+        public testIfValidRss(String stringUrl){
+            super();
+            this.stringUrl = stringUrl;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try{
+                URL url = new URL(stringUrl);
+                RSSFeedParser rfp = new RSSFeedParser(url, 5);
+                ArrayList<RssFeedModel> rfmList = rfp.parseFeed();
+                if(!rfmList.isEmpty()) {
+                    if(rfmList.get(0).getTitle() !=null) {
+                        Log.e("isEmpty", "" + rfmList.get(0).getTitle());
+                        asyncTaskAddCheck = true;
+                    }
+                }
+            }catch(Exception e ){
+                e.printStackTrace();
+                Log.e("EXCEPTIONNNN" ,""+e.getMessage() );
+
+            }
+            Log.e("EXCEPTIONNNN" ,"trueeeeeeeeeeeeeeee" );
+
+           return null;
+        } //doInBackGround end;
+
+    } // class end;
 
 }
