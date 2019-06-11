@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="373dp"
+        android:layout_height="328dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:ellipsize="end"
+        android:lines="1"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:scrollHorizontally="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/list_view_row_news_title"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="aasdsadasdsa"
+            android:textColor="#000000" />
+
+        <TextView
+            android:id="@+id/list_view_row_news_postLink"
+            android:layout_width="wrap_content"
+            android:layout_height="66dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textColor="#01579B"
+            tools:text="asdsadasdsadsadsad" />
+
+        <ImageView
+            android:id="@+id/list_view_row_news_image"
+            android:layout_width="match_parent"
+            android:layout_height="132dp"
+            android:layout_marginBottom="50dp"
+            app:srcCompat="@android:color/darker_gray" />
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>
