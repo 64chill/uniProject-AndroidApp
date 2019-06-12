@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">unip_SimpleRSSFeeder_app</string>
     <string name="title_home">Vesti</string>
-    <string name="title_show_unique_news">Pregled Pojedinačnih</string>
+    <string name="title_show_unique_news">Izbor Vesti</string>
     <string name="title_edit_news">Izmeni Vesti</string>
     <string name="inputHandle_edit_news_add">Please add the RSS URL </string>
     <string name="title_activity_view_rss_urls">ViewRssUrls</string>

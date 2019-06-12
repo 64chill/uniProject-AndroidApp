@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -81,6 +82,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     }
 
     private void refreshBttonClick(){
+        //Toast.makeText(view.getContext(), "You can't do that!, please insert at least one URL", Toast.LENGTH_LONG).show();
         // get URLS from out database and put them in an array
         ArrayList<String> urlList = new ArrayList<>();
         Cursor mCoursor = mDatabaseHelper.getURLs();
@@ -89,12 +91,12 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             urlList.add(mCoursor.getString(0));
         }
         /// start to parse, get news and relevant data from the internet
-        if (urlList !=null || !urlList.isEmpty()) {
+        try{
+            urlList.get(0);
             new grabAndShowNews(urlList).execute();
-        } else {
+        } catch (Exception e){
             Toast.makeText(view.getContext(), "You can't do that!, please insert at least one URL", Toast.LENGTH_LONG).show();
         }
-
     }
     /*
      *
@@ -167,8 +169,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             Log.e("SP_error_write1111111" ,e.getMessage());
         }
         editor.commit();
-
-
     }
 
     //___________________________ getArrayList_FromSharedPreferences ______________________________
@@ -177,7 +177,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         //Retrieve the values
         // load tasks from preference
         ArrayList<NewsCard> arrL = new ArrayList<>();
-
 
         try {
             SharedPreferences prefs = context.getSharedPreferences("SimpleRSSFeeder_NewsList", Context.MODE_PRIVATE);
@@ -188,7 +187,5 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             Log.e("SP_error_read" , e.getMessage());
         }
         return arrL;
-
     }
-
 }
