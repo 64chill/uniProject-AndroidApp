@@ -19,6 +19,7 @@ public class RSSFeedParser {
     private ArrayList<RssFeedModel> rssFeedModelList;
     private int howManyItemsToParse;
 
+    // _____________________________ RSSFeedParser _________________________________________________
     public RSSFeedParser(URL rss_url, int howManyItemsToParse){
 
         rssFeedModelList = new ArrayList<>();
@@ -33,6 +34,7 @@ public class RSSFeedParser {
 
     }
 
+    // _____________________________ parseFeed _____________________________________________________
     public ArrayList<RssFeedModel> parseFeed() throws Exception {
 
         String mTitle = "";

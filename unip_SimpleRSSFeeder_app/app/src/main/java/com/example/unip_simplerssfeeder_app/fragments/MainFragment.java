@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -30,7 +29,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 
-//TODO SHOW TOAST
+
 public class MainFragment extends Fragment implements View.OnClickListener {
     private View view;
     private DatabaseHelperRSSUrl mDatabaseHelper;
@@ -47,6 +46,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                          Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_main, container, false);
+
+        /* _________________________ init */
         mDatabaseHelper = new DatabaseHelperRSSUrl(getActivity()); //set database helper
 
         view.findViewById(R.id.button_refresh_news).setOnClickListener(this);
@@ -63,7 +64,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 public void onItemClick(AdapterView<?> parent, View view, int position,
                                         long id) {
                     NewsCard nc = (NewsCard) parent.getItemAtPosition(position);
-                    Log.e("adapterviewclick" ,nc.getPostLink() );
                     Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(nc.getPostLink()));
                     startActivity(browserIntent);
                 }
@@ -82,7 +82,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     }
 
     private void refreshBttonClick(){
-        //Toast.makeText(view.getContext(), "You can't do that!, please insert at least one URL", Toast.LENGTH_LONG).show();
         // get URLS from out database and put them in an array
         ArrayList<String> urlList = new ArrayList<>();
         Cursor mCoursor = mDatabaseHelper.getURLs();
@@ -116,9 +115,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         @Override
         protected Void doInBackground(Void... voids) {
             for (String uniqueUrl: urlList) {
-                Log.e("SimpleRSSFeeder" ,""+uniqueUrl );
                 try {
-                    /*start ---------------------------------------------------------------------------*/
+                    /*start ----------------------------------------------------------------------*/
                     URL url = new URL(uniqueUrl);
                     RSSFeedParser rfp = new RSSFeedParser(url, 5);
                     ArrayList<RssFeedModel> rfmList = rfp.parseFeed();
@@ -128,7 +126,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                     }
                     newsCardsArray.addAll(ncList);
 
-                    /*end ---------------------------------------------------------------------------*/
+                    /*end ------------------------------------------------------------------------*/
 
                 } catch (Exception e) {
                     Log.e("SimpleRSSFeeder" , e.getMessage());
@@ -158,13 +156,11 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     public void setSharedPreferences(ArrayList<NewsCard> arrayL  , Context context){
 
         //Set the values
-
         SharedPreferences prefs = context.getSharedPreferences("SimpleRSSFeeder_NewsList", Context.MODE_PRIVATE );
         SharedPreferences.Editor editor = prefs.edit();
         try {
             prefs.edit().remove("nwl").commit(); // remove specific key from our shared preferences
             editor.putString("nwl" , new JsonHandler().get_NewsCardArrayList_ToJsonStringFormat(arrayL));
-            Log.e("add", this.newsCardsArray.toString());
         } catch (Exception e){
             Log.e("SP_error_write1111111" ,e.getMessage());
         }
@@ -173,7 +169,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     //___________________________ getArrayList_FromSharedPreferences ______________________________
     public ArrayList<NewsCard> getArrayList_FromSharedPreferences(Context context){
-        Log.e("read" , "start");
         //Retrieve the values
         // load tasks from preference
         ArrayList<NewsCard> arrL = new ArrayList<>();

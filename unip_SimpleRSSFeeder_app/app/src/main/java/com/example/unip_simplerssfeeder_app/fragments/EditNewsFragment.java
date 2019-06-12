@@ -24,7 +24,6 @@ import com.example.unip_simplerssfeeder_app.utils.xml_parser_classes.RSSFeedPars
 import com.example.unip_simplerssfeeder_app.utils.xml_parser_classes.RssFeedModel;
 
 
-//TODO SHOW TOAST
 public class EditNewsFragment extends Fragment implements View.OnClickListener {
     private View view;
     private DatabaseHelperRSSUrl mDatabaseHelper;//new DatabaseHelperRSSUrl(view.getContext());
@@ -74,9 +73,7 @@ public class EditNewsFragment extends Fragment implements View.OnClickListener {
         boolean bb = Pattern.matches(myPattern, user_input);
 
         if (bb){
-            //if (doesURLContainRSSfeed(user_input)){
                 return true;
-            //}
         }
         Toast.makeText(view.getContext(), "URL is invalid : Please make sure to add http:// or https:// at the beginning", Toast.LENGTH_LONG).show();
         return false;
@@ -105,45 +102,14 @@ public class EditNewsFragment extends Fragment implements View.OnClickListener {
     }
     // ---------------------------------------------------------------------------------------------------- doesURLContainRSSfeed
     public boolean doesURLContainRSSfeed(String stringUrl) {
-        //stringUrl = "http://google.com";
-        Log.e("stringUrl" ,stringUrl );
 
         new testIfValidRss(stringUrl);
         try {
-            new testIfValidRss(stringUrl).execute().get();/*
-            try{
-                URL rss_url = new URL(stringUrl);
-                InputStream inputStream = rss_url.openConnection().getInputStream();
-                XmlPullParser xmlPullParser = Xml.newPullParser();
-                xmlPullParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
-                xmlPullParser.setInput(inputStream, null);
-            }catch(Exception e ){
-                e.printStackTrace();
-                Log.e("EXCEPTIONNNN" ,""+e.getMessage() );
-                return false;
-
-            }
-            Log.e("EXCEPTIONNNN" ,"trueeeeeeeeeeeeeeee" );
-            return false;*/
+            new testIfValidRss(stringUrl).execute().get();
         } catch (Exception e) {
             e.printStackTrace();
         }
         return this.asyncTaskAddCheck;
-
-        //address = "http://www.espn.com/espn/rss/news";
-        /*Toast.makeText(view.getContext(), "ADDRESS : " + address, Toast.LENGTH_SHORT).show();
-        boolean ok = false;
-        try{
-            URL url = new URL(address);
-            HttpURLConnection httpcon = (HttpURLConnection)url.openConnection();
-            SyndFeedInput input = new SyndFeedInput();
-            SyndFeed feed = input.build(new XmlReader(url));
-            ok = true;
-        } catch (Exception exc){
-            ok = false;
-        }
-        Toast.makeText(view.getContext(), "OK : " + ok, Toast.LENGTH_SHORT).show();
-        return ok;*/
     }
 
     class testIfValidRss extends AsyncTask<Void, Void, Void> {
@@ -161,16 +127,14 @@ public class EditNewsFragment extends Fragment implements View.OnClickListener {
                 ArrayList<RssFeedModel> rfmList = rfp.parseFeed();
                 if(!rfmList.isEmpty()) {
                     if(rfmList.get(0).getTitle() !=null) {
-                        Log.e("isEmpty", "" + rfmList.get(0).getTitle());
                         asyncTaskAddCheck = true;
                     }
                 }
             }catch(Exception e ){
                 e.printStackTrace();
-                Log.e("EXCEPTIONNNN" ,""+e.getMessage() );
+                Log.e("EXCEPTION" ,""+e.getMessage() );
 
             }
-            Log.e("EXCEPTIONNNN" ,"trueeeeeeeeeeeeeeee" );
 
            return null;
         } //doInBackGround end;

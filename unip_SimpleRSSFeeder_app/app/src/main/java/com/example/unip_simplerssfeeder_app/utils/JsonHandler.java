@@ -9,11 +9,13 @@ import java.util.ArrayList;
 public class JsonHandler {
     public JsonHandler(){}
 
+    // _____________________________ get_NewsCardArrayList_ToJsonStringFormat_______________________
     public String get_NewsCardArrayList_ToJsonStringFormat(ArrayList<NewsCard> newsCardArrayList){
         Gson gson = new Gson();
         return gson.toJson(newsCardArrayList);
     }
 
+    // _____________________________ get_JsonStringFormat_ToNewsCardArrayList ______________________
     public ArrayList<NewsCard> get_JsonStringFormat_ToNewsCardArrayList(String json_structure){
         Gson gson = new Gson();
         Type type = new TypeToken<ArrayList<NewsCard>>(){}.getType();

@@ -36,7 +36,6 @@ public class NewsListAdapter extends ArrayAdapter<NewsCard> {
         TextView itemUrl = (TextView) customView.findViewById(R.id.list_view_row_news_postLink);
         ImageView imageview = (ImageView) customView.findViewById(R.id.list_view_row_news_image);
 
-
             // dynamically update the text from the array
             itemTitle.setText(item.getTitle());
             itemUrl.setText(item.getPostLink());
@@ -45,7 +44,6 @@ public class NewsListAdapter extends ArrayAdapter<NewsCard> {
             if(imageUrl != "") {new DownloadImageTask(imageview).execute(imageUrl);}
 
             //return our custom View or custom item
-
         return customView;
     }
 

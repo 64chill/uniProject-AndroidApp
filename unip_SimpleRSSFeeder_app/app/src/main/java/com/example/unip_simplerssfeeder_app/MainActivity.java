@@ -1,6 +1,5 @@
 package com.example.unip_simplerssfeeder_app;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
@@ -9,7 +8,6 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.unip_simplerssfeeder_app.fragments.EditNewsFragment;
 import com.example.unip_simplerssfeeder_app.fragments.MainFragment;
@@ -17,7 +15,7 @@ import com.example.unip_simplerssfeeder_app.fragments.UniqueNewsFragment;
 
 public class MainActivity extends AppCompatActivity {
     private TextView mTextMessage;
-
+    // _____________________________ mOnNavigationItemSelectedListener _____________________________
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -40,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    // _____________________________ onCreate ______________________________________________________
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

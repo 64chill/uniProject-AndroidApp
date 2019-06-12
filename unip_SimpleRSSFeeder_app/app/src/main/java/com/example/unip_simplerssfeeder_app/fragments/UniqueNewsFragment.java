@@ -39,12 +39,13 @@ public class UniqueNewsFragment extends Fragment  implements View.OnClickListene
     private ArrayList<NewsCard> newsCardsArray;
     private NewsListAdapter customAdapter;
 
-
+    // _____________________________ UniqueNewsFragment ____________________________________________
     public UniqueNewsFragment() {
         // Required empty public constructor
         newsCardsArray = new ArrayList<>();
     }
 
+    // _____________________________ onCreateView __________________________________________________
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -55,6 +56,7 @@ public class UniqueNewsFragment extends Fragment  implements View.OnClickListene
         return view;
     }
 
+    // _____________________________ initComponents ________________________________________________
     public void initComponents(){
         mDatabaseHelper      = new DatabaseHelperRSSUrl(getActivity()); //set database helper
         this.inputUniqueNews = (Spinner) view.findViewById(R.id.spinner_url_to_fetch);
@@ -75,22 +77,21 @@ public class UniqueNewsFragment extends Fragment  implements View.OnClickListene
         while(mCoursor.moveToNext()){
             inputUniqueNewsList.add(mCoursor.getString(0));
         }
-
-        if (inputUniqueNewsList !=null || !inputUniqueNewsList.isEmpty()) {
+        try{
+            inputUniqueNewsList.get(0);
             ArrayAdapter<String> adapterUniqueNews = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, inputUniqueNewsList);
             this.inputUniqueNews.setAdapter(adapterUniqueNews);
 
-        } else {
+        } catch (Exception e){
             Toast.makeText(view.getContext(), "You can't do that!, please insert at least one URL", Toast.LENGTH_LONG).show();
+            return;
         }
-
 
         ArrayAdapter<String> adapterNewsNums   = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, newsNumList);
         this.newsNum.setAdapter(adapterNewsNums);
 
         this.uniqueLVistView    = (ListView) view.findViewById(R.id.list_view_unique_news);
         this.buttonGrabNews     = (Button) view.findViewById(R.id.button_grab_unique_news);
-
 
         buttonGrabNews.setOnClickListener(this);
         this.uniqueLVistView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -102,13 +103,13 @@ public class UniqueNewsFragment extends Fragment  implements View.OnClickListene
                 startActivity(browserIntent);
             }
         });
-    };
+    }// initComponents end;
 
+    // _____________________________ onClick _______________________________________________________
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_grab_unique_news:
-                //TODO something here
                 String rss_url   = (String)((Spinner) view.findViewById(R.id.spinner_url_to_fetch)).getSelectedItem();
                 String numToShow = (String)((Spinner) view.findViewById(R.id.spinner_number_of_news_to_show)).getSelectedItem();
 
