@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.example.unip_simplerssfeeder_app.R;
 import com.example.unip_simplerssfeeder_app.customAdapter.NewsListAdapter;
 import com.example.unip_simplerssfeeder_app.utils.DatabaseHelperRSSUrl;
+import com.example.unip_simplerssfeeder_app.utils.JsonHandler;
 import com.example.unip_simplerssfeeder_app.utils.NewsCard;
 import com.example.unip_simplerssfeeder_app.utils.xml_parser_classes.RSSFeedParser;
 import com.example.unip_simplerssfeeder_app.utils.xml_parser_classes.RssFeedModel;
@@ -27,6 +28,7 @@ import com.example.unip_simplerssfeeder_app.utils.xml_parser_classes.RssFeedMode
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
+
 
 public class UniqueNewsFragment extends Fragment  implements View.OnClickListener{
     private View view;
@@ -43,6 +45,29 @@ public class UniqueNewsFragment extends Fragment  implements View.OnClickListene
     public UniqueNewsFragment() {
         // Required empty public constructor
         newsCardsArray = new ArrayList<>();
+    }
+
+    // _____________________________ onActivityCreated _____________________________________________
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        //load fragment state
+        if (savedInstanceState != null) {
+            String jsonString= savedInstanceState.getString("STATE_LIST_VIEW");
+            newsCardsArray = new JsonHandler().get_JsonStringFormat_ToNewsCardArrayList(jsonString);
+
+            Collections.shuffle(newsCardsArray); // randomize news
+            customAdapter = new NewsListAdapter(getActivity(), newsCardsArray);
+            uniqueLVistView.setAdapter(customAdapter);
+        }
+    }
+
+    // _____________________________ onSaveInstanceState ___________________________________________
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        // save fragment state
+        outState.putString("STATE_LIST_VIEW", new JsonHandler().get_NewsCardArrayList_ToJsonStringFormat(newsCardsArray));
+        super.onSaveInstanceState(outState);
     }
 
     // _____________________________ onCreateView __________________________________________________
@@ -128,6 +153,7 @@ public class UniqueNewsFragment extends Fragment  implements View.OnClickListene
         public grabAndShowUniqueNews(String rss_url, Integer numToShow){
             this.rss_url = rss_url;
             this.numToShow = numToShow;
+            newsCardsArray.clear();
         }
 
         @Override
@@ -156,6 +182,4 @@ public class UniqueNewsFragment extends Fragment  implements View.OnClickListene
             return;
         } //onPostExecute end;
     } // class end;
-
-
 }

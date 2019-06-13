@@ -18,6 +18,7 @@ import com.example.unip_simplerssfeeder_app.utils.NewsCard;
 import java.io.InputStream;
 import java.util.List;
 
+
 public class NewsListAdapter extends ArrayAdapter<NewsCard> {
 
     public NewsListAdapter(Context context, List<NewsCard> newsCards) {

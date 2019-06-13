@@ -2,6 +2,7 @@ package com.example.unip_simplerssfeeder_app.utils.xml_parser_classes;
 
 import com.example.unip_simplerssfeeder_app.utils.NewsCard;
 
+
 public class RssFeedModel {
     private String title;
     private String imgUrl;
