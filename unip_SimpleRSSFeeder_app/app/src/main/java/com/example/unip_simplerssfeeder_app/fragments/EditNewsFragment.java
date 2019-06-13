@@ -98,11 +98,11 @@ public class EditNewsFragment extends Fragment implements View.OnClickListener {
     // ---------------------------------------------------------------------------------------------------- doesURLContainRSSfeed
     public boolean doesURLContainRSSfeed(String stringUrl) {
 
-        new testIfValidRss(stringUrl);
+        //new testIfValidRss(stringUrl);
         try {
             new testIfValidRss(stringUrl).execute().get();
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("error" , e.getMessage());
         }
         return this.asyncTaskAddCheck;
     }
@@ -120,6 +120,10 @@ public class EditNewsFragment extends Fragment implements View.OnClickListener {
                 URL url = new URL(stringUrl);
                 RSSFeedParser rfp = new RSSFeedParser(url, 5);
                 ArrayList<RssFeedModel> rfmList = rfp.parseFeed();
+                if(rfmList == null){
+                    asyncTaskAddCheck = false;
+                    return null;
+                }
                 if(!rfmList.isEmpty()) {
                     if(rfmList.get(0).getTitle() !=null) {
                         asyncTaskAddCheck = true;
@@ -128,6 +132,7 @@ public class EditNewsFragment extends Fragment implements View.OnClickListener {
             }catch(Exception e ){
                 e.printStackTrace();
                 Log.e("EXCEPTION" ,""+e.getMessage() );
+                asyncTaskAddCheck = false;
             }
            return null;
         } //doInBackGround end;

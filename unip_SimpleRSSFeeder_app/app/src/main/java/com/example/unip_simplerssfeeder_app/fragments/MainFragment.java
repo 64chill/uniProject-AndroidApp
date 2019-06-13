@@ -36,12 +36,11 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     private ArrayList<NewsCard> newsCardsArray;
     private ListView allNews_listVew;
     private NewsListAdapter customAdapter;
-
+    //___________________________ MainFragment _____________________________________________________
     public MainFragment() {
-        // Required empty public constructor
         newsCardsArray = new ArrayList<>();
     }
-
+    //___________________________ onCreateView _____________________________________________________
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                          Bundle savedInstanceState) {
@@ -55,6 +54,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
         /*setting saved news----------------------------------------------------------------------*/
         newsCardsArray = getArrayList_FromSharedPreferences(getActivity());
+        Log.e("erroriiino", ""+newsCardsArray.toString());
         if (newsCardsArray !=null || !newsCardsArray.isEmpty()) {
             customAdapter = new NewsListAdapter(getActivity(), newsCardsArray);
             allNews_listVew.setAdapter(customAdapter);
@@ -69,10 +69,12 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                     startActivity(browserIntent);
                 }
             });
+        } else {
+            allNews_listVew.setAdapter(null);
         }
         return view;
     }
-
+    //___________________________ onClick __________________________________________________________
     @Override
     public void onClick(View v) {
         //////////////////////////////////////////
@@ -81,7 +83,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             refreshBttonClick();
         }
     }
-
+    //___________________________ refreshBttonClick ________________________________________________
     private void refreshBttonClick(){
         // get URLS from out database and put them in an array
         ArrayList<String> urlList = new ArrayList<>();
@@ -175,12 +177,18 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
         try {
             SharedPreferences prefs = context.getSharedPreferences("SimpleRSSFeeder_NewsList", Context.MODE_PRIVATE);
-            String jsonString = prefs.getString("nwl" , "[{}]");
+            String jsonString = prefs.getString("nwl" , "");
+            Log.e("json string" , jsonString);
+            if (jsonString == "") {
+                return new ArrayList<NewsCard>();
+            }
             arrL = new JsonHandler().get_JsonStringFormat_ToNewsCardArrayList(jsonString);
 
         } catch (Exception e) {
             Log.e("SP_error_read" , e.getMessage());
+            return new ArrayList<NewsCard>();
         }
+
         return arrL;
     }
 }

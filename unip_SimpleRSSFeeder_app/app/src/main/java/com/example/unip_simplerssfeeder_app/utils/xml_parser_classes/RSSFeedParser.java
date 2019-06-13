@@ -103,6 +103,7 @@ public class RSSFeedParser {
             } // while (xmlPullParser.next() != XmlPullParser.END_DOCUMENT) { end;
         } catch(Exception e){
             Log.e("ERRORR_SSFEEDER" , e.getMessage());
+            return null;
         }
         this.inputStream.close();
         return rssFeedModelList;

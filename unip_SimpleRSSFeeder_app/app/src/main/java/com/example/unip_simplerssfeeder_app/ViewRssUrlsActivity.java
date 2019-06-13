@@ -55,7 +55,7 @@ public class ViewRssUrlsActivity extends AppCompatActivity implements View.OnCli
         while(mCoursor.moveToNext()){
             tmpList.add(mCoursor.getString(0));
         }
-        
+
         //create the list adapter and set the adapter
         ListAdapter adapter = new UrlListAdapter(context,tmpList );
         mListView.setAdapter(adapter);
