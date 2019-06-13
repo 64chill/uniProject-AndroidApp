@@ -38,12 +38,9 @@ public class EditNewsFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_edit_news, container, false);
 
-
         view.findViewById(R.id.button_add_rss_url).setOnClickListener(this); // add button
         view.findViewById(R.id.button_view_rss_urls).setOnClickListener(this); // view button
         mDatabaseHelper = new DatabaseHelperRSSUrl(view.getContext());
-
-
         return view;
     }
     // ---------------------------------------------------------------------------------------------------- onClick
@@ -52,21 +49,19 @@ public class EditNewsFragment extends Fragment implements View.OnClickListener {
         if (v.getId() == R.id.button_add_rss_url){
             String input_url = ((EditText) view.findViewById(R.id.input_rss_url)).getText().toString();
             input_url = input_url.trim();
-            if(checkIfRSSIsValid(input_url)){
-                addUrlToDB(input_url);
 
-            } else {
-                //Toast.makeText(view.getContext(), "URL is invalid : Please make sure to add http:// or https:// at the beginning", Toast.LENGTH_LONG).show();
-            }
             //check if this URL exists
             // add to database - show Toast
+            if(checkIfRSSIsValid(input_url)){
+                addUrlToDB(input_url);
+            }
         }
 
         if (v.getId() == R.id.button_view_rss_urls){
             Intent i = new Intent(v.getContext(), ViewRssUrlsActivity.class);
             startActivity(i);
         }
-        }
+    }
     // ---------------------------------------------------------------------------------------------------- checkIfRSSIsValid
     private boolean checkIfRSSIsValid(String user_input){
         String myPattern = "^(http:\\/\\/www\\.|https:\\/\\/www\\.|http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$";
@@ -133,12 +128,8 @@ public class EditNewsFragment extends Fragment implements View.OnClickListener {
             }catch(Exception e ){
                 e.printStackTrace();
                 Log.e("EXCEPTION" ,""+e.getMessage() );
-
             }
-
            return null;
         } //doInBackGround end;
-
     } // class end;
-
 }

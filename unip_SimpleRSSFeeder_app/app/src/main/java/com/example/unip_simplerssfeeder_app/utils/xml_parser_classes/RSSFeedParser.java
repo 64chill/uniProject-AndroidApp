@@ -30,19 +30,17 @@ public class RSSFeedParser {
         }catch(Exception e){
             Log.e("ERRORR_SSFEEDER" , e.getMessage());
         }
-
-
     }
 
     // _____________________________ parseFeed _____________________________________________________
     public ArrayList<RssFeedModel> parseFeed() throws Exception {
 
-        String mTitle = "";
-        String mLink = "";
-        String mImgUrl = "";
-        boolean isItem = false;
-        int num_tmp = 0;
-        int itemParseCount = 0;
+        String  mTitle         = "";
+        String  mLink          = "";
+        String  mImgUrl        = "";
+        boolean isItem         = false;
+        int     num_tmp        = 0;
+        int     itemParseCount = 0;
 
         try {
             XmlPullParser xmlPullParser = Xml.newPullParser();
@@ -56,7 +54,7 @@ public class RSSFeedParser {
                         break;
                 }
                 int eventType = xmlPullParser.getEventType();
-                // proveri da li nam tag ne treba---------------------------------------------------
+                // check if we do not need a tag---------------------------------------------------
                 String name = xmlPullParser.getName();
                 if (name == null)
                     continue;
@@ -97,15 +95,14 @@ public class RSSFeedParser {
                         num_tmp++; itemParseCount++;
                         RssFeedModel item = new RssFeedModel(mTitle, mImgUrl, mLink);
                         this.rssFeedModelList.add(item);
-                        mTitle = "";
+                        mTitle  = "";
                         mImgUrl = "";
-                        mLink = "";
+                        mLink   = "";
                     }
                 }
             } // while (xmlPullParser.next() != XmlPullParser.END_DOCUMENT) { end;
         } catch(Exception e){
             Log.e("ERRORR_SSFEEDER" , e.getMessage());
-
         }
         this.inputStream.close();
         return rssFeedModelList;

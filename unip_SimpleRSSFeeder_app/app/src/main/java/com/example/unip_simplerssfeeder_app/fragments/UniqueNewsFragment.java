@@ -37,7 +37,6 @@ public class UniqueNewsFragment extends Fragment  implements View.OnClickListene
     private DatabaseHelperRSSUrl mDatabaseHelper;
     private ListView uniqueLVistView;
     private Button buttonGrabNews;
-
     private ArrayList<NewsCard> newsCardsArray;
     private NewsListAdapter customAdapter;
 
@@ -102,12 +101,13 @@ public class UniqueNewsFragment extends Fragment  implements View.OnClickListene
         while(mCoursor.moveToNext()){
             inputUniqueNewsList.add(mCoursor.getString(0));
         }
+        //check if there are any URLS in out database
         try{
             inputUniqueNewsList.get(0);
             ArrayAdapter<String> adapterUniqueNews = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, inputUniqueNewsList);
             this.inputUniqueNews.setAdapter(adapterUniqueNews);
 
-        } catch (Exception e){
+        } catch (Exception e){ // if not show a Toast!
             Toast.makeText(view.getContext(), "You can't do that!, please insert at least one URL", Toast.LENGTH_LONG).show();
             return;
         }
@@ -140,10 +140,9 @@ public class UniqueNewsFragment extends Fragment  implements View.OnClickListene
 
                 new grabAndShowUniqueNews(rss_url , Integer.parseInt(numToShow)).execute();
                 break;
-        }
+        } // switch end;
 
     } // end onClick;
-
 
     //___________________________ grabAndShowNews __________________________________________________
     class grabAndShowUniqueNews extends AsyncTask<Void, Void, Void> {
@@ -154,7 +153,7 @@ public class UniqueNewsFragment extends Fragment  implements View.OnClickListene
             this.rss_url = rss_url;
             this.numToShow = numToShow;
             newsCardsArray.clear();
-        }
+        }// grabAndShowUniqueNews end;
 
         @Override
         protected Void doInBackground(Void... voids) {
@@ -166,7 +165,7 @@ public class UniqueNewsFragment extends Fragment  implements View.OnClickListene
                     ArrayList<NewsCard> ncList = new ArrayList<>();
                     for (RssFeedModel model : rfmList) {
                         ncList.add(model.getNewsCardObject());
-                    }
+                    } // for end;
                     newsCardsArray.addAll(ncList);
                     /*end ---------------------------------------------------------------------------*/
                 } catch (Exception e) {

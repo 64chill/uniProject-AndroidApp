@@ -7,7 +7,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.annotation.NonNull;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import com.example.unip_simplerssfeeder_app.fragments.EditNewsFragment;
 import com.example.unip_simplerssfeeder_app.fragments.MainFragment;
@@ -16,7 +15,6 @@ import com.example.unip_simplerssfeeder_app.fragments.UniqueNewsFragment;
 public class MainActivity extends AppCompatActivity {
     Fragment mContent;
 
-    private TextView mTextMessage;
     // _____________________________ mOnNavigationItemSelectedListener _____________________________
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -58,14 +56,11 @@ public class MainActivity extends AppCompatActivity {
             this.mContent = getSupportFragmentManager().getFragment(savedInstanceState, "myFragmentName");
         } else {
             set_MainFragment();
-           /* FragmentManager fm1 = getSupportFragmentManager();
-            fm1.beginTransaction().replace(R.id.mainContentLayout, this.mContent, this.mContent.getTag()).commit();*/
-        }
+        } // end if restore;
 
 
         BottomNavigationView navView = (BottomNavigationView) findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
     }
 
     /* *********************************************************************************************

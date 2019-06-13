@@ -52,6 +52,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
         view.findViewById(R.id.button_refresh_news).setOnClickListener(this);
         allNews_listVew = (ListView) view.findViewById(R.id.list_view_all_news);
+
         /*setting saved news----------------------------------------------------------------------*/
         newsCardsArray = getArrayList_FromSharedPreferences(getActivity());
         if (newsCardsArray !=null || !newsCardsArray.isEmpty()) {
@@ -121,13 +122,12 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                     RSSFeedParser rfp = new RSSFeedParser(url, 5);
                     ArrayList<RssFeedModel> rfmList = rfp.parseFeed();
                     ArrayList<NewsCard> ncList = new ArrayList<>();
+
                     for (RssFeedModel model : rfmList) {
                         ncList.add(model.getNewsCardObject());
                     }
                     newsCardsArray.addAll(ncList);
-
                     /*end ------------------------------------------------------------------------*/
-
                 } catch (Exception e) {
                     Log.e("SimpleRSSFeeder" , e.getMessage());
 
@@ -162,7 +162,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             prefs.edit().remove("nwl").commit(); // remove specific key from our shared preferences
             editor.putString("nwl" , new JsonHandler().get_NewsCardArrayList_ToJsonStringFormat(arrayL));
         } catch (Exception e){
-            Log.e("SP_error_write1111111" ,e.getMessage());
+            Log.e("SP_error_write" ,e.getMessage());
         }
         editor.commit();
     }

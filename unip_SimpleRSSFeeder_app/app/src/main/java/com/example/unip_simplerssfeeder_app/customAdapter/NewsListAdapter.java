@@ -44,7 +44,7 @@ public class NewsListAdapter extends ArrayAdapter<NewsCard> {
             // if not empty string, if empty = there is no image to show
             if(imageUrl != "") {new DownloadImageTask(imageview).execute(imageUrl);}
 
-            //return our custom View or custom item
+            //return our custom View/custom item
         return customView;
     }
 
@@ -53,11 +53,12 @@ public class NewsListAdapter extends ArrayAdapter<NewsCard> {
         ImageView bmImage;
 
         public DownloadImageTask(ImageView bmImage) {
+            //grab image view
             this.bmImage = bmImage;
         }
 
         protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
+            String urldisplay = urls[0]; // grab our param that we proviidedd
             Bitmap mIcon11 = null;
             try {
                 InputStream in = new java.net.URL(urldisplay).openStream();
@@ -69,6 +70,7 @@ public class NewsListAdapter extends ArrayAdapter<NewsCard> {
         }
 
         protected void onPostExecute(Bitmap result) {
+            //finally set the image
             bmImage.setImageBitmap(result);
         }
     }
