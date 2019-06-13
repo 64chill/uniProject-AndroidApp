@@ -54,8 +54,7 @@ public class UniqueNewsFragment extends Fragment  implements View.OnClickListene
         if (savedInstanceState != null) {
             String jsonString= savedInstanceState.getString("STATE_LIST_VIEW");
             newsCardsArray = new JsonHandler().get_JsonStringFormat_ToNewsCardArrayList(jsonString);
-
-            Collections.shuffle(newsCardsArray); // randomize news
+            
             customAdapter = new NewsListAdapter(getActivity(), newsCardsArray);
             uniqueLVistView.setAdapter(customAdapter);
         }
